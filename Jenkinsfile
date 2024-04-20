@@ -42,7 +42,7 @@ pipeline {
                 body: '$DEFAULT_CONTENT',
                 recipientProviders: [[$class: 'CulpritsRecipientProvider']],
                 attachmentsPattern: '**/target/*.jar',
-                attachBuildLog: true,
+                attachLog: true,
                 replyTo: '$DEFAULT_REPLYTO',
                 contentType: 'text/html'
             )
@@ -57,7 +57,7 @@ pipeline {
                 body: '$DEFAULT_CONTENT',
                 recipientProviders: [[$class: 'CulpritsRecipientProvider']],
                 attachmentsPattern: '**/target/*.jar',
-                attachBuildLog: true,
+                attachLog: true,
                 replyTo: '$DEFAULT_REPLYTO',
                 contentType: 'text/html'
             )
