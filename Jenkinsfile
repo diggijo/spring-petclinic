@@ -14,7 +14,7 @@ pipeline {
             }
             post {
                 success {
-                    archiveArtifacts artifacts: '**/target/*.jar', allowEmptyArchive: true
+                    archiveArtifacts artifacts: '**/target/*.war', allowEmptyArchive: true
                 }
             }
         }
@@ -43,7 +43,7 @@ pipeline {
                 script {
                     // Find the JAR file
                     sh """
-                    curl -T ./target/*.jar http://4.180.4.233:8080/manager/text/deploy?path=/myapp -u diggijo:@SmallJoe10
+                    curl -T ./target/*.war http://4.180.4.233:8080/manager/text/deploy?path=/myapp -u diggijo:@SmallJoe10
                     """
                 }
             }
