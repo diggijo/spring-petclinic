@@ -1,12 +1,6 @@
 pipeline {
     agent any
 
-    environment {
-        TOMCAT_URL = 'http://4.180.4.233:8080/'
-        TOMCAT_USER = 'diggijo'
-        TOMCAT_PASS = '@SmallJoe10'
-    }
-
     stages {
         stage('Checkout') {
             steps {
@@ -47,7 +41,7 @@ pipeline {
         stage('Deploy to Tomcat') {
             steps {
                 sh '''
-                curl -T **/target/*.war ${TOMCAT_URL}/manager/text/deploy?path=/myapp -u ${TOMCAT_USER}:${TOMCAT_PASS}
+                curl -T **/target/*.war http://4.180.4.233:8080/manager/text/deploy?path=/myapp -u diggijo:@SmallJoe10
                 '''
             }
         }
