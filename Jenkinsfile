@@ -1,6 +1,10 @@
 pipeline {
     agent any
 
+    environment {
+        SONARQUBE_URL = 'http://20.224.237.139:9000'
+    }
+
     stages {
         stage('Checkout') {
             steps {
@@ -8,59 +12,42 @@ pipeline {
             }
         }
 
-        stage('Build') {
+        stage('Build and Package') {
             steps {
                 sh 'mvn clean package'
             }
+            post {
+                success {
+                    archiveArtifacts artifacts: '**/target/*.jar', allowEmptyArchive: true
+                }
+            }
         }
 
-        stage('Test') {
+        stage('Unit Test') {
             steps {
                 sh 'mvn test'
             }
-            
             post {
                 always {
-                    // Archive JUnit-formatted test results
                     junit '**/target/surefire-reports/*.xml'
-                    
-                    // Record test results
-                    step([$class: 'JUnitResultArchiver', testResults: '**/target/surefire-reports/*.xml'])
+                }
+            }
+        }
+
+        stage('SonarQube Analysis') {
+            steps {
+                withSonarQubeEnv('SonarQube') {
+                    sh 'mvn sonar:sonar'
                 }
             }
         }
     }
 
     post {
-        success {
-            // Actions to perform if the pipeline succeeds
-            echo 'Build succeeded! Deploying artifact...'
-            
-            // Send email notification
-            emailext (
-                subject: '$DEFAULT_SUBJECT',
-                body: '$DEFAULT_CONTENT',
-                recipientProviders: [[$class: 'CulpritsRecipientProvider']],
-                attachmentsPattern: '**/target/*.jar',
-                attachLog: true,
-                replyTo: '$DEFAULT_REPLYTO',
-                contentType: 'text/html'
-            )
-        }
-        failure {
-            // Actions to perform if the pipeline fails
-            echo 'Build failed! Not deploying artifact.'
-            
-            // Send email notification
-            emailext (
-                subject: '$DEFAULT_SUBJECT',
-                body: '$DEFAULT_CONTENT',
-                recipientProviders: [[$class: 'CulpritsRecipientProvider']],
-                attachmentsPattern: '**/target/*.jar',
-                attachLog: true,
-                replyTo: '$DEFAULT_REPLYTO',
-                contentType: 'text/html'
-            )
+        always {
+            mail to: 'youremail@example.com',
+                 subject: "Pipeline ${currentBuild.result}",
+                 body: "Pipeline ${currentBuild.result}"
         }
     }
 }
