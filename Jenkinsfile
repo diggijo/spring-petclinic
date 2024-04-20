@@ -40,9 +40,16 @@ pipeline {
 
         stage('Deploy to Tomcat') {
             steps {
-                sh '''
-                curl -T **/target/*.war http://4.180.4.233:8080/manager/text/deploy?path=/myapp -u diggijo:@SmallJoe10
-                '''
+                script {
+                    // Find the WAR file
+                    def warFile = sh(script: 'find . -name "*.war"', returnStdout: true).trim()
+                    echo "Deploying ${warFile} to Tomcat..."
+            
+                    // Deploy WAR file to Tomcat using curl
+                    sh """
+                    curl -T ${warFile} http://4.180.4.233:8080/manager/text/deploy?path=/myapp -u diggijo:@SmallJoe10
+                    """
+                }
             }
         }
     }
