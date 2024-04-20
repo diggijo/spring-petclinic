@@ -14,9 +14,9 @@ pipeline {
             }
             post {
                 success {
-                    archiveArtifacts artifacts: '**/target/*.war', allowEmptyArchive: true
-                    sh 'echo "Archived WAR files:"'
-                    sh 'ls ./target/*.war'
+                    archiveArtifacts artifacts: '**/target/*.jar', allowEmptyArchive: true
+                    sh 'echo "Archived JAR files:"'
+                    sh 'ls ./target/*.jar'
                 }
             }
         }
@@ -43,9 +43,9 @@ pipeline {
         stage('Deploy to Tomcat') {
             steps {
                 script {
-                    sh 'ls ./target/*.war'
+                    sh 'ls ./target/*.jar'
                     sh """
-                    curl -v -T ./target/*.war http://4.180.4.233:8080/manager/text/deploy?path=/PetClinic -u diggijo:@SmallJoe10
+                    curl -v -T ./target/*.jar http://4.180.4.233:8080/manager/text/deploy?path=/PetClinic -u diggijo:@SmallJoe10
                     """
                 }
             }
