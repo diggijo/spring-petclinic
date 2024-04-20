@@ -14,7 +14,7 @@ pipeline {
             }
             post {
                 success {
-                    archiveArtifacts artifacts: '**/target/*.war', allowEmptyArchive: true
+                    archiveArtifacts artifacts: '**/target/*.jar', allowEmptyArchive: true
                 }
             }
         }
@@ -42,7 +42,7 @@ pipeline {
             steps {
                 script {
                     sh """
-                    curl -v -T ./target/your-artifact-name.war http://4.180.4.233:8080/manager/text/deploy?path=/myapp-new -u diggijo:@SmallJoe10
+                    curl -v -T ./target/*.jar http://4.180.4.233:8080/manager/text/deploy?path=/PetClinic -u diggijo:@SmallJoe10
                     """
                 }
             }
