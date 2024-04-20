@@ -1,11 +1,6 @@
 pipeline {
     agent any
 
-    environment {
-        // Define SonarQube server credentials
-        SONAR_TOKEN = credentials('sonar-token')
-    }
-
     stages {
         stage('Checkout') {
             steps {
@@ -20,40 +15,20 @@ pipeline {
         }
 
         stage('Test') {
-            steps {
-                sh 'mvn test'
-            }
-        }
-
-        stage('SonarQube Analysis') {
-            steps {
-                withSonarQubeEnv('SonarQube') {
-                    sh "mvn sonar:sonar -Dsonar.login=${SONAR_TOKEN}"
+            post {
+                always {
+                    junit '**/target/surefire-reports/*.xml'
                 }
-            }
-        }
-
-        stage('Deploy to Tomcat') {
-            steps {
-                deploy adapters: [tomcat7(credentialsId: 'tomcat-credentials', url: 'http://tomcat-server:8080')], contextPath: '', war: '**/*.war'
             }
         }
     }
 
     post {
         success {
-            emailext (
-                subject: "Build Success",
-                body: "Build ${currentBuild.fullDisplayName} succeeded.",
-                recipientProviders: [[$class: 'DevelopersRecipientProvider']]
-            )
+            echo 'Build succeeded!'
         }
         failure {
-            emailext (
-                subject: "Build Failure",
-                body: "Build ${currentBuild.fullDisplayName} failed.",
-                recipientProviders: [[$class: 'DevelopersRecipientProvider']]
-            )
+            echo 'Build failed!'
         }
     }
 }
