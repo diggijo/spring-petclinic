@@ -45,7 +45,7 @@ pipeline {
 
     post {
         always {
-            mail to: 'youremail@example.com',
+            mail to: 'joseph.diggins15@gmail.com',
                  subject: "Pipeline ${currentBuild.result}",
                  body: "Pipeline ${currentBuild.result}"
         }
