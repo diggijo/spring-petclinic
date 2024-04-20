@@ -41,13 +41,13 @@ pipeline {
         stage('Deploy to Tomcat') {
             steps {
                 script {
-                    // Find the WAR file
-                    def warFile = sh(script: 'find . -name "*.war"', returnStdout: true).trim()
-                    echo "Deploying ${warFile} to Tomcat..."
-            
-                    // Deploy WAR file to Tomcat using curl
+                    // Find the JAR file
+                    def jarFile = sh(script: 'find . -name "*.jar"', returnStdout: true).trim()
+                    echo "Deploying ${jarFile} to Tomcat..."
+    
+                    // Deploy JAR file to Tomcat using curl
                     sh """
-                    curl -T ${warFile} http://4.180.4.233:8080/manager/text/deploy?path=/myapp -u diggijo:@SmallJoe10
+                    curl -T ${jarFile} http://4.180.4.233:8080/manager/text/deploy?path=/myapp -u diggijo:@SmallJoe10
                     """
                 }
             }
