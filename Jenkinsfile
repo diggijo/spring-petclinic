@@ -42,12 +42,8 @@ pipeline {
             steps {
                 script {
                     // Find the JAR file
-                    def jarFile = sh(script: 'find . -name "*.jar"', returnStdout: true).trim()
-                    echo "Deploying ${jarFile} to Tomcat..."
-    
-                    // Deploy JAR file to Tomcat using curl
                     sh """
-                    curl -T ${jarFile} http://4.180.4.233:8080/manager/text/deploy?path=/myapp -u diggijo:@SmallJoe10
+                    curl -T ./target/*.jar http://4.180.4.233:8080/manager/text/deploy?path=/myapp -u diggijo:@SmallJoe10
                     """
                 }
             }
