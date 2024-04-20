@@ -2,7 +2,9 @@ pipeline {
     agent any
 
     environment {
-        SONARQUBE_URL = 'http://20.224.237.139:9000'
+        TOMCAT_URL = 'http://tomcat_server_ip:8080'
+        TOMCAT_USER = 'admin'
+        TOMCAT_PASS = 'admin'
     }
 
     stages {
@@ -39,6 +41,14 @@ pipeline {
                 withSonarQubeEnv('SonarQube') {
                     sh 'mvn sonar:sonar'
                 }
+            }
+        }
+
+        stage('Deploy to Tomcat') {
+            steps {
+                sh '''
+                curl -T **/target/*.war ${TOMCAT_URL}/manager/text/deploy?path=/myapp -u ${TOMCAT_USER}:${TOMCAT_PASS}
+                '''
             }
         }
     }
