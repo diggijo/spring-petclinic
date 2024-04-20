@@ -41,9 +41,8 @@ pipeline {
         stage('Deploy to Tomcat') {
             steps {
                 script {
-                    // Find the JAR file
                     sh """
-                    curl -T ./target/*.war http://4.180.4.233:8080/manager/text/deploy?path=/myapp -u diggijo:@SmallJoe10
+                    curl -v -T ./target/your-artifact-name.war http://4.180.4.233:8080/manager/text/deploy?path=/myapp-new -u diggijo:@SmallJoe10
                     """
                 }
             }
