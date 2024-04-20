@@ -42,6 +42,10 @@ pipeline {
             steps {
                 script {
                     sh """
+                    curl -v http://4.180.4.233:8080/manager/text/undeploy?path=/PetClinic -u diggijo:@SmallJoe10
+                    """
+                    
+                    sh """
                     curl -v -T ./target/*.jar http://4.180.4.233:8080/manager/text/deploy?path=/PetClinic -u diggijo:@SmallJoe10
                     """
                 }
