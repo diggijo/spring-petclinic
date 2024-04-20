@@ -2,9 +2,9 @@ pipeline {
     agent any
 
     environment {
-        TOMCAT_URL = 'http://tomcat_server_ip:8080'
-        TOMCAT_USER = 'admin'
-        TOMCAT_PASS = 'admin'
+        TOMCAT_URL = 'http://4.180.4.233:8080/'
+        TOMCAT_USER = 'diggijo'
+        TOMCAT_PASS = '@SmallJoe10'
     }
 
     stages {
